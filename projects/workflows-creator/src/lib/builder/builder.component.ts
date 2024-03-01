@@ -203,6 +203,7 @@ export class BuilderComponent<E> implements OnInit, OnChanges {
       });
       this.updateDiagram();
     }
+    this.hideElseBlockIfRequired();
   }
   /**
    * If the group is an event, add it to the eventGroups array, otherwise if it's an action, add it to
@@ -273,6 +274,7 @@ export class BuilderComponent<E> implements OnInit, OnChanges {
     });
     this.updateDiagram();
     this.updateState(action.node, action.newNode.inputs);
+    this.hideElseBlockIfRequired();
   }
   /**
    * The function is called when an item is changed in the UI. It emits an event to the parent
@@ -288,15 +290,16 @@ export class BuilderComponent<E> implements OnInit, OnChanges {
     this.updateState(item.element.node, item.element.inputs);
     // TODO: to be refactored
     // to hide else block when anything is selected in ValueInput or ValueTypeInput
-    this.elseBlockHidden =
-      this.eventGroups[0].children?.length === 1 &&
-      this.eventGroups[0].children[0].node.getIdentifier() ===
-        EventTypes.OnChangeEvent &&
-      (this.eventGroups[0].children[0].node.state.get('value') ===
-        ValueTypes.AnyValue ||
-        this.eventGroups[0].children[0].node.state.get('valueType') ===
-          ValueTypes.AnyValue);
+    // this.elseBlockHidden =
+    //   this.eventGroups[0].children?.length === 1 &&
+    //   this.eventGroups[0].children[0].node.getIdentifier() ===
+    //     EventTypes.OnChangeEvent &&
+    //   (this.eventGroups[0].children[0].node.state.get('value') ===
+    //     ValueTypes.AnyValue ||
+    //     this.eventGroups[0].children[0].node.state.get('valueType') ===
+    //       ValueTypes.AnyValue);
     this.updateDiagram();
+    this.hideElseBlockIfRequired();
   }
   /**
    * "If the type is a group, then get the groups, otherwise throw an error."
@@ -439,6 +442,23 @@ export class BuilderComponent<E> implements OnInit, OnChanges {
       });
     }
     return this.builder.build(statement, elseStatement);
+  }
+  hideElseBlockIfRequired() {
+    const events = this.eventGroups[0].children;
+    let value = events[0].node.state.get('value');
+    if (typeof value === 'object') {
+      value = value.value;
+    }
+    if (events.length !== 1) {
+      this.elseBlockHidden = false;
+    } else {
+      this.elseBlockHidden =
+        events[0].node.getIdentifier() === EventTypes.OnIntervalEvent ||
+        events[0].node.getIdentifier() === EventTypes.OnAddItemEvent ||
+        (events[0].node.getIdentifier() === EventTypes.OnChangeEvent &&
+          (value === ValueTypes.AnyValue ||
+            events[0].node.state.get('valueType') === ValueTypes.AnyValue));
+    }
   }
   /**
    * It builds a new diagram, emits the new diagram, and then tells Angular to update the view
