@@ -613,6 +613,31 @@ export class GroupComponent<E> implements OnInit, AfterViewInit {
       this.hidePopper();
     }
   }
+
+  handleKeyPress(event: any) {
+    const keyCode = event.which || event.keyCode;
+    const isDigit = keyCode >= 48 && keyCode <= 57;
+    const isBackspaceOrDelete = [8, 46].includes(keyCode);
+    const inputValue = event.target.value;
+    const isValidInput = /^-?\d*\.?\d*$/.test(inputValue);
+    if (!(isDigit || isBackspaceOrDelete) || !isValidInput) {
+      event.preventDefault();
+    }
+  }
+  handleEnterEvent(
+    callback: any,
+    node: BpmnNode,
+    $event: any,
+    type: string,
+    event: any,
+  ) {
+    const response = this.getLibraryValue(node, $event, type, {});
+
+    //check whether the entered key is "ENTER" key
+    if (event.keyCode === 13) {
+      callback(response);
+    }
+  }
   /**
    * It removes all the inputs that come after the current input
    * @param element - NodeWithInput<E>
