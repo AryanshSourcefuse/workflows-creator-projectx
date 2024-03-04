@@ -445,7 +445,8 @@ export class BuilderComponent<E> implements OnInit, OnChanges {
   }
   hideElseBlockIfRequired() {
     const events = this.eventGroups[0].children;
-    let value = events[0].node.state.get('value');
+    let value =
+      events.length > 0 ? events[0]?.node?.state.get('value') : undefined;
     if (typeof value === 'object') {
       value = value.value;
     }
