@@ -623,8 +623,25 @@ export class GroupComponent<E> implements OnInit, AfterViewInit {
   ) {
     const response = this.getLibraryValue(node, $event, type, {});
 
+    let isResponseValid = true;
+    if (typeof response === 'object') {
+      Object.keys(response).forEach(key => {
+        if (typeof response[key] === 'object') {
+          Object.keys(response[key]).forEach(innerKey => {
+            if (!isResponseValid) return;
+
+            if (Number.isNaN(response[key][innerKey])) {
+              isResponseValid = false;
+            }
+          });
+        }
+      });
+    } else {
+      isResponseValid = false;
+    }
+
     //check whether the entered key is "ENTER" key
-    if (event.keyCode === 13) {
+    if (event.keyCode === 13 && isResponseValid) {
       callback(response);
     }
   }
