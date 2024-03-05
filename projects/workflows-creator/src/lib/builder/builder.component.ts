@@ -48,6 +48,7 @@ import {
 } from '../types';
 import {LocalizationProviderService} from '../services/localization-provider.service';
 import {LocalizationPipe} from '../pipes/localization.pipe';
+import {ConditionInput} from '../services';
 @Component({
   selector: 'workflow-builder',
   templateUrl: './builder.component.html',
@@ -493,7 +494,16 @@ export class BuilderComponent<E> implements OnInit, OnChanges {
             }
             const valueTypeIsAnyValue =
               node.node.state.get('valueType') === ValueTypes.AnyValue;
-            isValid = columnExists && (valueExists || valueTypeIsAnyValue);
+            let conditionExist = false;
+            if (node.node.prompts.includes(ConditionInput.identifier)) {
+              conditionExist = !!node.node.state.get('condition');
+            } else {
+              conditionExist = true;
+            }
+            isValid =
+              columnExists &&
+              (valueExists || valueTypeIsAnyValue) &&
+              conditionExist;
             break;
           case EventTypes.OnIntervalEvent:
             const intervalExists = !!node.node.state.get('interval');
