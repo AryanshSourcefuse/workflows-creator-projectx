@@ -212,6 +212,11 @@ input[type="time"]:focus {
         border: 0;
         border-radius: 5px;
       }
+      .close-btn-lib:disabled,
+      .close-btn-lib[disabled] {
+        opacity: 0.8;
+        cursor: not-allowed;
+      }
     }
   }
   .text-input {
