@@ -401,9 +401,23 @@ export class GroupComponent<E> implements OnInit, AfterViewInit {
    * It hides the previous popper and shows the current popper.
    * @param {MouseEvent} event - MouseEvent - The event that triggered the popper to show.
    * @param {NgxPopperjsContentComponent} popper - NgxPopperjsContentComponent - this is the popper
+   * @param {input} input
+   * @param {nodeWithInput} nodeWithInput
    * component that you want to show/hide.
    */
-  onPoperClick(event: MouseEvent, popper: NgxPopperjsContentComponent) {
+  onPoperClick(
+    event: MouseEvent,
+    popper: NgxPopperjsContentComponent,
+    input: any,
+    nodeWithInput: any,
+  ) {
+    if (
+      !input.typeFunction(nodeWithInput.node.state) ||
+      !input.options(nodeWithInput.node.state)
+    ) {
+      // Options or input type is not present, preventing the popper from showing
+      return;
+    }
     this.prevPopperRef?.hide();
     this.groupService.previousPopper?.hide();
     this.groupService.previousPopper?.popperInstance.forceUpdate();

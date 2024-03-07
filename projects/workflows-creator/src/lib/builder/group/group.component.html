@@ -92,7 +92,7 @@
           [popperTrigger]="'none'"
           [popperPlacement]="'bottom-start'"
           [popperApplyClass]="'workflow-popper'"
-          (click)="onPoperClick($event, inputPopper)"
+          (click)="onPoperClick($event, inputPopper, input, nodeWithInput)"
           (mouseover)="showTooltip($event, nodeWithInput, input)"
           (mouseout)="hideTooltip()"
         >
