@@ -113,6 +113,8 @@ export class GroupComponent<E> implements OnInit, AfterViewInit {
     focusKey: '',
   };
 
+  hoveredElementId: string = '';
+
   dropdownSettings: IDropdownSettings = {
     singleSelection: false,
     idField: 'id',
@@ -688,5 +690,9 @@ export class GroupComponent<E> implements OnInit, AfterViewInit {
     const inputValue = event.target.value;
     const isValidInput = /^-?\d*\.?\d*$/.test(inputValue);
     if (!isValidInput) event.preventDefault();
+  }
+
+  setHooverTooltip(nodeWithInput: any) {
+    this.hoveredElementId = nodeWithInput?.node?.id || '';
   }
 }

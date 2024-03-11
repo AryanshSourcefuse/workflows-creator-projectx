@@ -74,7 +74,9 @@
   </popper-content>
 
   <ng-template #inputs let-nodeWithInput="node">
-    <ng-container *ngFor="let input of nodeWithInput.inputs || []">
+    <ng-container
+      *ngFor="let input of nodeWithInput.inputs || []; let i = index"
+    >
       <ng-container
         *ngIf="!(input.isHidden && input.isHidden(nodeWithInput.node))"
       >
@@ -106,6 +108,7 @@
           <span
             class="placeholder-text"
             *ngIf="!input.getValueName(nodeWithInput.node.state)"
+            (mouseenter)="setHooverTooltip(nodeWithInput)"
           >
             {{
               nodeWithInput.node.state.get(input.customPlaceholder?.state) ??
@@ -114,12 +117,16 @@
           </span>
         </div>
         <workflow-tooltip-render
-          *ngIf="shouldShowTooltip(nodeWithInput, input)"
+          *ngIf="
+            shouldShowTooltip(nodeWithInput, input) &&
+            hoveredElementId === nodeWithInput.node.id
+          "
           [showsTooltip]="showsTooltip"
           [tooltipText]="tooltipText"
           [topPosition]="topPosition"
           [leftPosition]="null"
           [rightPosition]="rightPosition"
+          [id]="i"
         ></workflow-tooltip-render>
         {{
           (input.suffix?.state

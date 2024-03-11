@@ -11,6 +11,7 @@ export class TooltipRenderComponent {
   @Input() topPosition = 215;
   @Input() leftPosition = 400;
   @Input() rightPosition = 150;
+  @Input() id = '';
 
   constructor() {}
 }
