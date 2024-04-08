@@ -38,6 +38,8 @@ import {
 import {IDropdownSettings} from 'ng-multiselect-dropdown';
 import {
   ChangeColumnValue,
+  EmailDataInput,
+  EmailToInput,
   GatewayElement,
   LocalizationProviderService,
   ReadColumnValue,
@@ -414,8 +416,10 @@ export class GroupComponent<E> implements OnInit, AfterViewInit {
     nodeWithInput: any,
   ) {
     if (
-      !input.typeFunction(nodeWithInput.node.state) ||
-      !input.options(nodeWithInput.node.state)
+      (!input.typeFunction?.(nodeWithInput.node.state) ||
+        !input.options?.(nodeWithInput.node.state)) &&
+      !(input instanceof EmailToInput) &&
+      !(input instanceof EmailDataInput)
     ) {
       // Options or input type is not present, preventing the popper from showing
       return;

@@ -28,6 +28,7 @@ import {
   LocalizedStringKeys,
   NodeTypes,
   NotificationRecipientTypesEnum,
+  NUMBER,
   ValueTypes,
 } from '../enum';
 import {InvalidEntityError} from '../errors/base.error';
@@ -48,7 +49,12 @@ import {
 } from '../types';
 import {LocalizationProviderService} from '../services/localization-provider.service';
 import {LocalizationPipe} from '../pipes/localization.pipe';
-import {ConditionInput} from '../services';
+import {
+  ConditionInput,
+  GatewayElement,
+  ReadColumnValue,
+  TriggerWhenColumnChanges,
+} from '../services';
 @Component({
   selector: 'workflow-builder',
   templateUrl: './builder.component.html',
@@ -369,6 +375,26 @@ export class BuilderComponent<E> implements OnInit, OnChanges {
     value: AllowedValues | AllowedValuesMap,
     select = false,
   ) {
+    if (
+      (input.getIdentifier() === 'ValueTypeInput' ||
+        input.getIdentifier() === 'ValueInput') &&
+      element.node.getIdentifier() === 'OnChangeEvent'
+    ) {
+      if ((value as AllowedValuesMap)?.value === ValueTypes.AnyValue) {
+        /**
+         * Remove node on changes event
+         */
+        element.node.elements.splice(-NUMBER.TWO, NUMBER.TWO);
+        // element.inputs[1].prefix = '';
+        //this.enableActionIcon = false;
+      } else {
+        element.node.elements = [
+          TriggerWhenColumnChanges.identifier,
+          ReadColumnValue.identifier,
+          GatewayElement.identifier,
+        ];
+      }
+    }
     if (select && isSelectInput(input)) {
       element.node.state.change(
         `${input.inputKey}Name`,
