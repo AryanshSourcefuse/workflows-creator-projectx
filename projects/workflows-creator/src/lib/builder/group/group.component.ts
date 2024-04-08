@@ -45,6 +45,7 @@ import {
   ReadColumnValue,
   ToValueInput,
   TriggerWhenColumnChanges,
+  ValueInput,
 } from '../../services';
 import {LocalizationPipe} from '../../pipes/localization.pipe';
 import moment from 'moment';
@@ -419,7 +420,8 @@ export class GroupComponent<E> implements OnInit, AfterViewInit {
       (!input.typeFunction?.(nodeWithInput.node.state) ||
         !input.options?.(nodeWithInput.node.state)) &&
       !(input instanceof EmailToInput) &&
-      !(input instanceof EmailDataInput)
+      !(input instanceof EmailDataInput) &&
+      !(input instanceof ValueInput)
     ) {
       // Options or input type is not present, preventing the popper from showing
       return;
