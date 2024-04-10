@@ -515,9 +515,11 @@ export class GroupComponent<E> implements OnInit, AfterViewInit {
         /**
          * Remove node on changes event
          */
-        element.node.elements.splice(-NUMBER.TWO, NUMBER.TWO);
-        // element.inputs[1].prefix = '';
-        this.enableActionIcon = false;
+        if (element.node.elements.length > 1) {
+          element.node.elements.splice(-NUMBER.TWO, NUMBER.TWO);
+          // element.inputs[1].prefix = '';
+          this.enableActionIcon = false;
+        }
       } else {
         element.node.elements = [
           TriggerWhenColumnChanges.identifier,

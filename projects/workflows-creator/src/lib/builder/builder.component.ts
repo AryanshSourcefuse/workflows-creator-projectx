@@ -380,7 +380,10 @@ export class BuilderComponent<E> implements OnInit, OnChanges {
         input.getIdentifier() === 'ValueInput') &&
       element.node.getIdentifier() === 'OnChangeEvent'
     ) {
-      if ((value as AllowedValuesMap)?.value === ValueTypes.AnyValue) {
+      if (
+        (value as AllowedValuesMap)?.value === ValueTypes.AnyValue &&
+        element.node.elements.includes(GatewayElement.identifier)
+      ) {
         /**
          * Remove node on changes event
          */

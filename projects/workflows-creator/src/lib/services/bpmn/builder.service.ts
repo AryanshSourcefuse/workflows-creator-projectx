@@ -100,7 +100,7 @@ export class BpmnBuilderService extends BuilderService<
    * @returns A start event.
    */
   private getStartEvent(trigger: BpmnStatementNode) {
-    if (!trigger || !(trigger.workflowNode as BpmnEvent)?.startElement) {
+    if (!trigger) {
       return this.elements.createInstanceByName(
         StartElementTypes.BasicStartElement,
       );
