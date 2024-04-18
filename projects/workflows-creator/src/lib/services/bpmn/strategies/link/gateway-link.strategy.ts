@@ -241,6 +241,20 @@ export class GatewayLinkStrategy implements LinkStrategy<ModdleElement> {
                 }
               `;
         case ValueTypes.Today:
+          if (isElse) {
+            return `
+                for(var key in readObj){
+                  var taskValuePair = readObj[key];
+                  if(taskValuePair && taskValuePair.value){
+                    var readDateValue = new Date(taskValuePair.value);
+                    if(readDateValue.toDateString() !== new Date().toDateString()){
+                      ids.push(taskValuePair.id);
+                    }
+                  }
+                }
+              `;
+          }
+
           return `
                 for(var key in readObj){
                   var taskValuePair = readObj[key];
